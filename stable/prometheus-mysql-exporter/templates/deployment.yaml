@@ -47,7 +47,14 @@ spec:
 {{- end }}
           env:
             - name: DATA_SOURCE_NAME
+{{- if ne .Values.mysql.existingSecret "" }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.existingSecret }}
+                  value: {{ .Values.mysql.existingSecret.DATA_SOURCE_NAME }}
+{{- else }}
               value: "{{ .Values.mysql.user }}:{{ .Values.mysql.pass }}@{{ if .Values.mysql.protocol }}{{ .Values.mysql.protocol }}{{ end }}({{ .Values.mysql.host }}:{{ .Values.mysql.port }})/{{ if .Values.mysql.db }}{{ .Values.mysql.db }}{{ end }}{{ if .Values.mysql.param }}?{{ .Values.mysql.param }}{{ end }}"
+{{- end }}
           ports:
             - containerPort: {{ .Values.service.internalPort }}
           livenessProbe:

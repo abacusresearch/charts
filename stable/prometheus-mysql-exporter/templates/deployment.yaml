@@ -47,7 +47,7 @@ spec:
 {{- end }}
           env:
             - name: DATA_SOURCE_NAME
-{{- if ne .Values.mysql.existingSecret "" }}
+{{- if .Values.mysql.existingSecret }}
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.mysql.existingSecret }}
